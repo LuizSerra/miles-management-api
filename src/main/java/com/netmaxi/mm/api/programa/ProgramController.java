@@ -1,7 +1,5 @@
 package com.netmaxi.mm.api.programa;
 
-import java.net.URI;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -19,6 +17,7 @@ import com.netmaxi.mm.api.programa.dto.ProgramaAtualizadoDTO;
 import com.netmaxi.mm.api.programa.dto.ProgramaAtualizarDTO;
 import com.netmaxi.mm.api.programa.dto.ProgramaEntradaDTO;
 import com.netmaxi.mm.api.programa.dto.ProgramaRetornoDTO;
+import com.netmaxi.mm.api.programa.service.ProgramaService;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -27,41 +26,31 @@ import jakarta.validation.Valid;
 @RequestMapping("/programas")
 public class ProgramController {
 	
-	private ProgramaRepository programaRepository;
+	private final ProgramaService programaService;
 	
-	public ProgramController(ProgramaRepository programaRepository) {
-		this.programaRepository = programaRepository;
+	public ProgramController(ProgramaService programaService) {
+		this.programaService = programaService;
 	}
 
 	@PostMapping
 	@Transactional
 	public ResponseEntity<ProgramaAtualizadoDTO> criar(@RequestBody @Valid ProgramaEntradaDTO programaDTO, UriComponentsBuilder uriBuilder) {
-		Programa programa = new Programa(programaDTO);
-		programaRepository.save(programa);
-		URI uri = uriBuilder.path("/programas/{id}").buildAndExpand(programa.getId()).toUri();
-		return ResponseEntity.created(uri).body(new ProgramaAtualizadoDTO(programa));
+		return programaService.criar(programaDTO, uriBuilder);
 	}
 	
 	@GetMapping
 	public ResponseEntity<Page<ProgramaRetornoDTO>> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable pag){
-		var page = programaRepository.findAll(pag).map(ProgramaRetornoDTO::new);
-		return ResponseEntity.ok(page);
+		return programaService.listar(pag);
 	}
 
-	
 	@GetMapping("/{id}")
 	public ResponseEntity<ProgramaAtualizadoDTO> buscarPorId(@PathVariable Long id){
-		var programa = programaRepository.getReferenceById(id);
-		return ResponseEntity.ok(new ProgramaAtualizadoDTO(programa));
+		return programaService.buscarPorId(id);
 	}
-	
 	
 	@PutMapping
 	@Transactional
 	public ResponseEntity<ProgramaAtualizadoDTO> atualizar(@RequestBody @Valid ProgramaAtualizarDTO programaDTO) {
-		var programa = programaRepository.getReferenceById(programaDTO.id());
-		programa.atualiza(programaDTO);
-		return ResponseEntity.ok(new ProgramaAtualizadoDTO(programa));
-		
+		return programaService.atualizar(programaDTO);
 	}
 }
