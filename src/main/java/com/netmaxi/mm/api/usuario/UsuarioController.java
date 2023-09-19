@@ -1,7 +1,5 @@
 package com.netmaxi.mm.api.usuario;
 
-import java.net.URI;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -19,6 +17,7 @@ import com.netmaxi.mm.api.usuario.dto.UsuarioAtualizadoDTO;
 import com.netmaxi.mm.api.usuario.dto.UsuarioAtualizarDTO;
 import com.netmaxi.mm.api.usuario.dto.UsuarioEntradaDTO;
 import com.netmaxi.mm.api.usuario.dto.UsuarioRetornoDTO;
+import com.netmaxi.mm.api.usuario.service.UsuarioService;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -27,43 +26,32 @@ import jakarta.validation.Valid;
 @RequestMapping("/usuarios")
 public class UsuarioController {
 	
-	UsuarioRepository usuarioRepository;
+	private final UsuarioService usuarioService;
 
-	public UsuarioController(UsuarioRepository usuarioRepository) {
-		this.usuarioRepository = usuarioRepository;
+	public UsuarioController(UsuarioService usuarioService) {
+		this.usuarioService = usuarioService;
 	}
 	
 	@PostMapping
 	@Transactional
 	public ResponseEntity<UsuarioAtualizadoDTO> criar(@RequestBody @Valid UsuarioEntradaDTO usuarioDTO, UriComponentsBuilder uriBuilder) {
-		Usuario usuario = new Usuario(usuarioDTO);
-		usuarioRepository.save(usuario);
-		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri();
-		return ResponseEntity.created(uri).body(new UsuarioAtualizadoDTO(usuario));
+		return usuarioService.criar(usuarioDTO, uriBuilder);
 	}
 	
 	@GetMapping
 	public ResponseEntity<Page<UsuarioRetornoDTO>> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable pag){
-		var page = usuarioRepository.findAll(pag).map(UsuarioRetornoDTO::new);
-		return ResponseEntity.ok(page);
+		return usuarioService.listar(pag);
 	}
 
-	
 	@GetMapping("/{id}")
 	public ResponseEntity<UsuarioAtualizadoDTO> buscarPorId(@PathVariable Long id){
-		var usuario = usuarioRepository.getReferenceById(id);
-		return ResponseEntity.ok(new UsuarioAtualizadoDTO(usuario));
+		return usuarioService.buscarPorId(id);
 	}
-	
 	
 	@PutMapping
 	@Transactional
 	public ResponseEntity<UsuarioAtualizadoDTO> atualizar(@RequestBody @Valid UsuarioAtualizarDTO usuarioDTO) {
-		var usuario = usuarioRepository.getReferenceById(usuarioDTO.id());
-			usuario.atualiza(usuarioDTO);
-		return ResponseEntity.ok(new UsuarioAtualizadoDTO(usuario));
-		
+		return usuarioService.atualizar(usuarioDTO);
 	}
-	
 
 }

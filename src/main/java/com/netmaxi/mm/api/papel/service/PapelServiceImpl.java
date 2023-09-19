@@ -17,7 +17,7 @@ import com.netmaxi.mm.api.papel.dto.PapelRetornoDTO;
 @Service
 public class PapelServiceImpl implements PapelService {
 	
-	private PapelRepository papelRepository;
+	private final PapelRepository papelRepository;
 	
 	public PapelServiceImpl(PapelRepository papelRepository) {
 		this.papelRepository = papelRepository;
