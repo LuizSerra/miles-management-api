@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 import com.netmaxi.mm.api.operacao.dto.OperacaoAtualizadaDTO;
 import com.netmaxi.mm.api.operacao.dto.OperacaoEntradaDTO;
 import com.netmaxi.mm.api.operacao.dto.OperacaoRetornoDTO;
+import com.netmaxi.mm.api.operacao.service.OperacaoService;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -25,32 +26,27 @@ import jakarta.validation.Valid;
 @RequestMapping("/operacoes")
 public class OperacaoController {
 
-	private OperacaoRepository operacaoRepository;
+	private final OperacaoService operacaoService;
 	
-	public OperacaoController(OperacaoRepository operacaoRepository) {
-		this.operacaoRepository = operacaoRepository;
+	public OperacaoController(OperacaoService operacaoService) {
+		this.operacaoService = operacaoService;
 	}
 
 	@PostMapping
 	@Transactional
 	public ResponseEntity<OperacaoAtualizadaDTO> criar(@RequestBody @Valid OperacaoEntradaDTO operacaoDTO, UriComponentsBuilder uriBuilder) {
-		Operacao operacao = new Operacao(operacaoDTO);
-		operacaoRepository.save(operacao);
-		URI uri = uriBuilder.path("/operacoes/{id}").buildAndExpand(operacao.getId()).toUri();
-		return ResponseEntity.created(uri).body(new OperacaoAtualizadaDTO(operacao));
+		return operacaoService.criar(operacaoDTO, uriBuilder);
 	}
 	
 	@GetMapping
 	public ResponseEntity<Page<OperacaoRetornoDTO>> listar(@PageableDefault(size = 10, sort = {"data"}) Pageable pag){
-		var page = operacaoRepository.findAll(pag).map(OperacaoRetornoDTO::new);
-		return ResponseEntity.ok(page);
+		return operacaoService.listar(pag);
 	}
 
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<OperacaoAtualizadaDTO> buscarPorId(@PathVariable Long id){
-		var operacao = operacaoRepository.getReferenceById(id);
-		return ResponseEntity.ok(new OperacaoAtualizadaDTO(operacao));
+		return operacaoService.buscarPorId(id);
 	}
 	
 }
