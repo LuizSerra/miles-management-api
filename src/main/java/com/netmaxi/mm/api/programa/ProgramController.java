@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.netmaxi.mm.api.programa.dto.PogramaAtualizadoDTO;
+import com.netmaxi.mm.api.programa.dto.ProgramaAtualizadoDTO;
 import com.netmaxi.mm.api.programa.dto.ProgramaAtualizarDTO;
 import com.netmaxi.mm.api.programa.dto.ProgramaEntradaDTO;
 import com.netmaxi.mm.api.programa.dto.ProgramaRetornoDTO;
@@ -35,11 +35,11 @@ public class ProgramController {
 
 	@PostMapping
 	@Transactional
-	public ResponseEntity<PogramaAtualizadoDTO> criar(@RequestBody @Valid ProgramaEntradaDTO programaDTO, UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<ProgramaAtualizadoDTO> criar(@RequestBody @Valid ProgramaEntradaDTO programaDTO, UriComponentsBuilder uriBuilder) {
 		Programa programa = new Programa(programaDTO);
 		programaRepository.save(programa);
 		URI uri = uriBuilder.path("/programas/{id}").buildAndExpand(programa.getId()).toUri();
-		return ResponseEntity.created(uri).body(new PogramaAtualizadoDTO(programa));
+		return ResponseEntity.created(uri).body(new ProgramaAtualizadoDTO(programa));
 	}
 	
 	@GetMapping
@@ -50,18 +50,18 @@ public class ProgramController {
 
 	
 	@GetMapping("/{id}")
-	public ResponseEntity buscarPorId(@PathVariable Long id){
+	public ResponseEntity<ProgramaAtualizadoDTO> buscarPorId(@PathVariable Long id){
 		var programa = programaRepository.getReferenceById(id);
-		return ResponseEntity.ok(new PogramaAtualizadoDTO(programa));
+		return ResponseEntity.ok(new ProgramaAtualizadoDTO(programa));
 	}
 	
 	
 	@PutMapping
 	@Transactional
-	public ResponseEntity<PogramaAtualizadoDTO> atualizar(@RequestBody @Valid ProgramaAtualizarDTO programaDTO) {
+	public ResponseEntity<ProgramaAtualizadoDTO> atualizar(@RequestBody @Valid ProgramaAtualizarDTO programaDTO) {
 		var programa = programaRepository.getReferenceById(programaDTO.id());
 		programa.atualiza(programaDTO);
-		return ResponseEntity.ok(new PogramaAtualizadoDTO(programa));
+		return ResponseEntity.ok(new ProgramaAtualizadoDTO(programa));
 		
 	}
 }

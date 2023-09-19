@@ -1,7 +1,5 @@
 package com.netmaxi.mm.api.programa;
 
-import org.springframework.beans.BeanUtils;
-
 import com.netmaxi.mm.api.programa.dto.ProgramaAtualizarDTO;
 import com.netmaxi.mm.api.programa.dto.ProgramaEntradaDTO;
 
