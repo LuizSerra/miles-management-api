@@ -33,14 +33,14 @@ public class OperacaoServiceImpl implements OperacaoService {
 
 	@Override
 	public ResponseEntity<Page<OperacaoRetornoDTO>> listar(Pageable pag) {
-		// TODO Auto-generated method stub
-		return null;
+		var page = operacaoRepository.findAll(pag).map(OperacaoRetornoDTO::new);
+		return ResponseEntity.ok(page);
 	}
 
 	@Override
 	public ResponseEntity<OperacaoAtualizadaDTO> buscarPorId(Long id) {
-		// TODO Auto-generated method stub
-		return null;
+		var operacao = operacaoRepository.getReferenceById(id);
+		return ResponseEntity.ok(new OperacaoAtualizadaDTO(operacao));
 	}
 
 }
