@@ -3,6 +3,7 @@ package com.netmaxi.mm.api.programa;
 import com.netmaxi.mm.api.programa.dto.ProgramaAtualizarDTO;
 import com.netmaxi.mm.api.programa.dto.ProgramaEntradaDTO;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,12 +19,17 @@ public class Programa {
 	private Long id;
 	private String nome;
 	private String descricao;
-		
+	private Integer saldo;
+	@Column(name = "saldo_disponivel")
+	private Integer saldoDisponivel;	
+	
 	public Programa() {}
 	
 	public Programa(ProgramaEntradaDTO programEntradaDTO) {
 		this.nome = programEntradaDTO.nome();
 		this.descricao = programEntradaDTO.descricao();
+		this.saldo = programEntradaDTO.saldo();
+		this.saldoDisponivel = programEntradaDTO.saldoDisponivel();
 	}
 
 	public Long getId() {
@@ -49,12 +55,32 @@ public class Programa {
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
 	}
+	
+	public Integer getSaldo() {
+		return saldo;
+	}
 
+	public void setSaldo(Integer saldo) {
+		this.saldo = saldo;
+	}
+
+	public Integer getSaldoDisponivel() {
+		return saldoDisponivel;
+	}
+
+	public void setSaldoDisponivel(Integer saldoDisponivel) {
+		this.saldoDisponivel = saldoDisponivel;
+	}
+	
 	public void atualiza(@Valid ProgramaAtualizarDTO programaDTO) {
 		
 		if(programaDTO.nome() != null) this.nome = programaDTO.nome();
 		
 		if(programaDTO.descricao() != null) this.descricao = programaDTO.descricao();
+		
+		if(programaDTO.saldo() != null) this.saldo = programaDTO.saldo();
+		
+		if(programaDTO.saldoDisponivel() != null) this.saldoDisponivel = programaDTO.saldoDisponivel();
 		
 	}
 

@@ -1,5 +1,7 @@
 package com.netmaxi.mm.api.papel;
 
+import java.net.URI;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -11,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.netmaxi.mm.api.papel.dto.PapelAtualizadoDTO;
 import com.netmaxi.mm.api.papel.dto.PapelEntradaDTO;
 import com.netmaxi.mm.api.papel.dto.PapelRetornoDTO;
 import com.netmaxi.mm.api.papel.service.PapelService;
@@ -31,13 +32,16 @@ public class PapelController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<PapelAtualizadoDTO> criar(@RequestBody @Valid PapelEntradaDTO papelDTO, UriComponentsBuilder uriBuilder) {
-		return papelService.criar(papelDTO, uriBuilder);
+	public ResponseEntity<PapelRetornoDTO> criar(@RequestBody @Valid PapelEntradaDTO papelDTO, UriComponentsBuilder uriBuilder) {
+		Papel papelCriado = papelService.criar(papelDTO);
+		URI uri = uriBuilder.path("/papeis/{id}").buildAndExpand(papelCriado.getId()).toUri();
+		return ResponseEntity.created(uri).body(new PapelRetornoDTO(papelCriado));
 	}
 	
 	@GetMapping
 	public ResponseEntity<Page<PapelRetornoDTO>> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable pag){
-		return papelService.listar(pag);
+		Page<Papel> pageRetornada =  papelService.listar(pag);
+		return ResponseEntity.ok(pageRetornada.map(PapelRetornoDTO::new));
 	}
 
 }

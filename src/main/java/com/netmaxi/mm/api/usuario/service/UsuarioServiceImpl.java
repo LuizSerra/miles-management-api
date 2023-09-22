@@ -1,19 +1,13 @@
 package com.netmaxi.mm.api.usuario.service;
 
-import java.net.URI;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import com.netmaxi.mm.api.usuario.Usuario;
 import com.netmaxi.mm.api.usuario.UsuarioRepository;
-import com.netmaxi.mm.api.usuario.dto.UsuarioAtualizadoDTO;
 import com.netmaxi.mm.api.usuario.dto.UsuarioAtualizarDTO;
 import com.netmaxi.mm.api.usuario.dto.UsuarioEntradaDTO;
-import com.netmaxi.mm.api.usuario.dto.UsuarioRetornoDTO;
 
 @Service
 public class UsuarioServiceImpl implements UsuarioService {
@@ -25,30 +19,29 @@ public class UsuarioServiceImpl implements UsuarioService {
 	}
 
 	@Override
-	public ResponseEntity<UsuarioAtualizadoDTO> criar(UsuarioEntradaDTO usuarioDTO, UriComponentsBuilder uriBuilder) {
+	public Usuario criar(UsuarioEntradaDTO usuarioDTO) {
 		Usuario usuario = new Usuario(usuarioDTO);
-		usuarioRepository.save(usuario);
-		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuario.getId()).toUri();
-		return ResponseEntity.created(uri).body(new UsuarioAtualizadoDTO(usuario));
+		usuario = usuarioRepository.save(usuario);
+		return usuario;
 	}
 
 	@Override
-	public ResponseEntity<Page<UsuarioRetornoDTO>> listar(Pageable pag) {
-		var page = usuarioRepository.findAll(pag).map(UsuarioRetornoDTO::new);
-		return ResponseEntity.ok(page);
+	public Page<Usuario> listar(Pageable pag) {
+		var page = usuarioRepository.findAll(pag);
+		return page;
 	}
 
 	@Override
-	public ResponseEntity<UsuarioAtualizadoDTO> buscarPorId(Long id) {
-		var usuario = usuarioRepository.getReferenceById(id);
-		return ResponseEntity.ok(new UsuarioAtualizadoDTO(usuario));
+	public Usuario buscarPorId(Long id) {
+		var usuarioEncontrado = usuarioRepository.getReferenceById(id);
+		return usuarioEncontrado;
 	}
 
 	@Override
-	public ResponseEntity<UsuarioAtualizadoDTO> atualizar(UsuarioAtualizarDTO usuarioDTO) {
-		var usuario = usuarioRepository.getReferenceById(usuarioDTO.id());
-		usuario.atualiza(usuarioDTO);
-		return ResponseEntity.ok(new UsuarioAtualizadoDTO(usuario));
+	public Usuario atualizar(UsuarioAtualizarDTO usuarioDTO) {
+		var usuarioEncontrado = buscarPorId(usuarioDTO.id());
+		usuarioEncontrado.atualiza(usuarioDTO);
+		return usuarioEncontrado;
 	}
 
 }

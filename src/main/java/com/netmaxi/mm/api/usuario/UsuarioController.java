@@ -1,5 +1,7 @@
 package com.netmaxi.mm.api.usuario;
 
+import java.net.URI;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -34,24 +36,29 @@ public class UsuarioController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<UsuarioAtualizadoDTO> criar(@RequestBody @Valid UsuarioEntradaDTO usuarioDTO, UriComponentsBuilder uriBuilder) {
-		return usuarioService.criar(usuarioDTO, uriBuilder);
+	public ResponseEntity<UsuarioRetornoDTO> criar(@RequestBody @Valid UsuarioEntradaDTO usuarioDTO, UriComponentsBuilder uriBuilder) {
+		Usuario usuarioCriado =  usuarioService.criar(usuarioDTO);
+		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(usuarioCriado.getId()).toUri();
+		return ResponseEntity.created(uri).body(new UsuarioRetornoDTO(usuarioCriado));
 	}
 	
 	@GetMapping
 	public ResponseEntity<Page<UsuarioRetornoDTO>> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable pag){
-		return usuarioService.listar(pag);
+	    Page<Usuario> page = usuarioService.listar(pag);
+	    return ResponseEntity.ok(page.map(UsuarioRetornoDTO::new));
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<UsuarioAtualizadoDTO> buscarPorId(@PathVariable Long id){
-		return usuarioService.buscarPorId(id);
+	public ResponseEntity<UsuarioRetornoDTO> buscarPorId(@PathVariable Long id) throws Exception{
+		var usuario = usuarioService.buscarPorId(id);
+		return ResponseEntity.ok(new UsuarioRetornoDTO(usuario));
 	}
 	
 	@PutMapping
 	@Transactional
 	public ResponseEntity<UsuarioAtualizadoDTO> atualizar(@RequestBody @Valid UsuarioAtualizarDTO usuarioDTO) {
-		return usuarioService.atualizar(usuarioDTO);
+		Usuario usuarioAtualizado = usuarioService.atualizar(usuarioDTO);
+		return ResponseEntity.ok(new UsuarioAtualizadoDTO(usuarioAtualizado));
 	}
 
 }

@@ -6,5 +6,9 @@ public record ProgramaEntradaDTO (
 		@NotBlank
 		String nome, 
 		
-		String descricao
+		String descricao,
+		
+		Integer saldo,
+		
+		Integer saldoDisponivel
 		) {}

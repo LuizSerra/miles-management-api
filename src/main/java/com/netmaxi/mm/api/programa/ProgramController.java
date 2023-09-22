@@ -1,5 +1,7 @@
 package com.netmaxi.mm.api.programa;
 
+import java.net.URI;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -34,23 +36,28 @@ public class ProgramController {
 
 	@PostMapping
 	@Transactional
-	public ResponseEntity<ProgramaAtualizadoDTO> criar(@RequestBody @Valid ProgramaEntradaDTO programaDTO, UriComponentsBuilder uriBuilder) {
-		return programaService.criar(programaDTO, uriBuilder);
+	public ResponseEntity<ProgramaRetornoDTO> criar(@RequestBody @Valid ProgramaEntradaDTO programaDTO,	UriComponentsBuilder uriBuilder) {
+		var programaCriado = programaService.criar(programaDTO);
+		URI uri = uriBuilder.path("/programas/{id}").buildAndExpand(programaCriado.getId()).toUri();
+		return ResponseEntity.created(uri).body(new ProgramaRetornoDTO(programaCriado));
 	}
 	
 	@GetMapping
 	public ResponseEntity<Page<ProgramaRetornoDTO>> listar(@PageableDefault(size = 10, sort = {"nome"}) Pageable pag){
-		return programaService.listar(pag);
+		var page = programaService.listar(pag);
+		return ResponseEntity.ok(page.map(ProgramaRetornoDTO::new));
 	}
 
 	@GetMapping("/{id}")
-	public ResponseEntity<ProgramaAtualizadoDTO> buscarPorId(@PathVariable Long id){
-		return programaService.buscarPorId(id);
+	public ResponseEntity<ProgramaRetornoDTO> buscarPorId(@PathVariable Long id){
+		var programaEncontrado = programaService.buscarPorId(id);
+		return ResponseEntity.ok(new ProgramaRetornoDTO(programaEncontrado));
 	}
 	
 	@PutMapping
 	@Transactional
 	public ResponseEntity<ProgramaAtualizadoDTO> atualizar(@RequestBody @Valid ProgramaAtualizarDTO programaDTO) {
-		return programaService.atualizar(programaDTO);
+		var programaAtualizado = programaService.atualizar(programaDTO);
+		return ResponseEntity.ok(new ProgramaAtualizadoDTO(programaAtualizado));
 	}
 }

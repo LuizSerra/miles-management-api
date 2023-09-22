@@ -6,6 +6,10 @@ public record ProgramaAtualizarDTO(
 		@NotNull
 		Long id, 
 		String nome, 
-		String descricao) {
+		String descricao,
+		Integer saldo,
+		Integer saldoDisponivel
+		
+		) {
 
 }

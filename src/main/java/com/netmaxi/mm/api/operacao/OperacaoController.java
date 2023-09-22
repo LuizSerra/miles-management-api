@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.netmaxi.mm.api.operacao.dto.OperacaoAtualizadaDTO;
 import com.netmaxi.mm.api.operacao.dto.OperacaoEntradaDTO;
 import com.netmaxi.mm.api.operacao.dto.OperacaoRetornoDTO;
 import com.netmaxi.mm.api.operacao.service.OperacaoService;
@@ -34,19 +33,23 @@ public class OperacaoController {
 
 	@PostMapping
 	@Transactional
-	public ResponseEntity<OperacaoAtualizadaDTO> criar(@RequestBody @Valid OperacaoEntradaDTO operacaoDTO, UriComponentsBuilder uriBuilder) {
-		return operacaoService.criar(operacaoDTO, uriBuilder);
+	public ResponseEntity<OperacaoRetornoDTO> criar(@RequestBody @Valid OperacaoEntradaDTO operacaoDTO, UriComponentsBuilder uriBuilder) {
+		var operacaoCriada = operacaoService.criar(operacaoDTO);
+		URI uri = uriBuilder.path("/operacoes/{id}").buildAndExpand(operacaoCriada.getId()).toUri();
+		return ResponseEntity.created(uri).body(new OperacaoRetornoDTO(operacaoCriada));
 	}
 	
 	@GetMapping
 	public ResponseEntity<Page<OperacaoRetornoDTO>> listar(@PageableDefault(size = 10, sort = {"data"}) Pageable pag){
-		return operacaoService.listar(pag);
+		var page =  operacaoService.listar(pag);
+		return ResponseEntity.ok(page.map(OperacaoRetornoDTO::new));
 	}
 
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<OperacaoAtualizadaDTO> buscarPorId(@PathVariable Long id){
-		return operacaoService.buscarPorId(id);
+	public ResponseEntity<OperacaoRetornoDTO> buscarPorId(@PathVariable Long id){
+		var operacaoEncontrada = operacaoService.buscarPorId(id);
+		return ResponseEntity.ok(new OperacaoRetornoDTO(operacaoEncontrada));
 	}
 	
 }
