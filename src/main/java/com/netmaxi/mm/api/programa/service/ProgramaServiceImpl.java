@@ -44,4 +44,12 @@ public class ProgramaServiceImpl implements ProgramaService {
 		return programaEncontrado;
 	}
 
+	@Override
+	public Boolean validarTransacao(Programa programaOrigem, Integer quantidade) throws Exception {
+		if(programaOrigem.getSaldoDisponivel().compareTo(quantidade) < 0) {
+			throw new Exception("Saldo disponível insuficiente");
+		}
+		return Boolean.TRUE;
+	}
+
 }

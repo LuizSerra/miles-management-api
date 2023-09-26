@@ -16,5 +16,7 @@ public interface ProgramaService {
 	public Programa buscarPorId(Long id);
 	
 	public Programa atualizar(ProgramaAtualizarDTO programaDTO);
+	
+	public Boolean validarTransacao(Programa programa, Integer quantidade) throws Exception;
 
 }
