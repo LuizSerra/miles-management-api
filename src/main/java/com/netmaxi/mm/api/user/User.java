@@ -3,6 +3,8 @@ package com.netmaxi.mm.api.user;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.netmaxi.mm.api.program.Program;
 import com.netmaxi.mm.api.role.Role;
 import com.netmaxi.mm.api.user.dto.UserModifyDTO;
 import com.netmaxi.mm.api.user.dto.UserRequestDTO;
@@ -16,6 +18,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -46,7 +49,10 @@ public class User {
 	    )
 	private List<Role> roles = new ArrayList<>();
 	
-	
+	@OneToMany(mappedBy="user")
+	@JsonManagedReference 
+	private List<Program> programs = new ArrayList<>();
+	 
 	public User(UserRequestDTO user) {
 		super();
 		this.active = user.active();
@@ -107,6 +113,14 @@ public class User {
 		this.roles = roles;
 	}
 
+	public List<Program> getPrograms() {
+		return programs;
+	}
+
+	public void setPrograms(List<Program> programs) {
+		this.programs = programs;
+	}
+	
 	public void update(@Valid UserModifyDTO userModifyDTO) {
 		
 		if(userModifyDTO.active() != null) this.active = userModifyDTO.active();
@@ -115,5 +129,4 @@ public class User {
 		if(userModifyDTO.password() != null) this.password = userModifyDTO.password();
 		
 	}
-	
 }

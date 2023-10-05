@@ -1,13 +1,17 @@
 package com.netmaxi.mm.api.program;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.netmaxi.mm.api.program.dto.ProgramModifyDTO;
 import com.netmaxi.mm.api.program.dto.ProgramRequestDTO;
+import com.netmaxi.mm.api.user.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 
@@ -21,7 +25,12 @@ public class Program {
 	private String description;
 	private Integer balance;
 	@Column(name = "balance_available")
-	private Integer balanceAvailable;	
+	private Integer balanceAvailable;
+	
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	@JsonBackReference
+	private User user;
 	
 	public Program() {}
 	
@@ -70,6 +79,14 @@ public class Program {
 
 	public void setBalanceAvailable(Integer balanceAvailable) {
 		this.balanceAvailable = balanceAvailable;
+	}
+	
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 	public void update(@Valid ProgramModifyDTO programUpdated) {

@@ -8,19 +8,25 @@ import com.netmaxi.mm.api.program.Program;
 import com.netmaxi.mm.api.program.ProgramRepository;
 import com.netmaxi.mm.api.program.dto.ProgramModifyDTO;
 import com.netmaxi.mm.api.program.dto.ProgramRequestDTO;
+import com.netmaxi.mm.api.user.User;
+import com.netmaxi.mm.api.user.service.UserService;
 
 @Service
 public class ProgramServiceImpl implements ProgramService {
 	
 	private final ProgramRepository programRepository;
+	private final UserService userService;
 	
-	public ProgramServiceImpl(ProgramRepository programaRepository) {
+	public ProgramServiceImpl(ProgramRepository programaRepository, UserService userService) {
 		this.programRepository = programaRepository;
+		this.userService = userService;
 	}
 
 	@Override
 	public Program create(ProgramRequestDTO programRequestDTO) {
 		Program program = new Program(programRequestDTO);
+		User user = userService.findByID(programRequestDTO.user());
+		program.setUser(user);
 		programRepository.save(program);
 		return program;
 	}
@@ -31,6 +37,13 @@ public class ProgramServiceImpl implements ProgramService {
 		return page;
 	}
 
+	@Override
+	public Page<Program> listByUser(Long userID, Pageable pageable) {
+		User user = userService.findByID(userID);
+		var page = programRepository.findByUser(user, pageable);
+		return page;
+	}
+	
 	@Override
 	public Program findById(Long id) {
 		var programFound = programRepository.getReferenceById(id);

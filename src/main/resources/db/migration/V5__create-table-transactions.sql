@@ -4,10 +4,8 @@ CREATE TABLE transactions (
   transaction_type varchar(20) NOT NULL,
   amount int,
   price decimal(15,2),
-  source_program_id bigint,
-  target_program_id bigint,
+  program_id bigint,
   
-	PRIMARY KEY (id),
- 	FOREIGN KEY (source_program_id) REFERENCES programs(id),
- 	FOREIGN KEY (target_program_id) REFERENCES programs(id)
+  PRIMARY KEY (id),
+  FOREIGN KEY (program_id) REFERENCES programs(id)
 );

@@ -7,7 +7,5 @@ CREATE TABLE users (
   PRIMARY KEY (id)
 );
 
-
-
 INSERT INTO users (name, email, password, active) VALUES ('ADMINISTRADOR', 'admin@softplan.com', '$2a$12$HwSYmZ7cl0R8MCTEaqZQe.XrSweX35mnsBT3kRoCTqquk4mBGChYe', true );
-INSERT INTO users (name, email, password, active) VALUES ('USUARIO', 'gerente@softplan.com', '$2a$12$HwSYmZ7cl0R8MCTEaqZQe.XrSweX35mnsBT3kRoCTqquk4mBGChYe', true );
+INSERT INTO users (name, email, password, active) VALUES ('USUARIO_TESTE', 'gerente@softplan.com', '$2a$12$HwSYmZ7cl0R8MCTEaqZQe.XrSweX35mnsBT3kRoCTqquk4mBGChYe', true );

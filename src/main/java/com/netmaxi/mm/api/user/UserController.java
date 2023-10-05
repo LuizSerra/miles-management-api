@@ -43,8 +43,8 @@ public class UserController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<Page<User>> list(@PageableDefault(size = 10) Pageable pag){
-	    Page<User> page = usuarioService.list(pag);
+	public ResponseEntity<Page<UserResponseDTO>> list(@PageableDefault(size = 10) Pageable pag){
+	    Page<UserResponseDTO> page = usuarioService.list(pag);
 	    return ResponseEntity.ok(page);
 	}
 

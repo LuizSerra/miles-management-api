@@ -12,6 +12,7 @@ import com.netmaxi.mm.api.user.User;
 import com.netmaxi.mm.api.user.UsuarioRepository;
 import com.netmaxi.mm.api.user.dto.UserModifyDTO;
 import com.netmaxi.mm.api.user.dto.UserRequestDTO;
+import com.netmaxi.mm.api.user.dto.UserResponseDTO;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -27,7 +28,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User create(UserRequestDTO userRequestDTO) {
 		User user = new User(userRequestDTO);
-		
 		List<Role> roles = papelRepository.findAllById(userRequestDTO.roles()); 
 		user.setRoles(roles);
 		user.setActive(true);
@@ -36,8 +36,8 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public Page<User> list(Pageable pag) {
-		var page = usuarioRepository.findAll(pag);
+	public Page<UserResponseDTO> list(Pageable pag) {
+		var page = usuarioRepository.findAll(pag).map(UserResponseDTO::new);
 		return page;
 	}
 

@@ -2,8 +2,8 @@ CREATE TABLE users_roles (
   user_id bigint NOT NULL,
   role_id bigint NOT NULL,
   PRIMARY KEY (user_id, role_id),
-  CONSTRAINT FkidUsuarioUP FOREIGN KEY (user_id) REFERENCES users (id),
-  CONSTRAINT FKidPapelUP FOREIGN KEY (role_id) REFERENCES roles (id)
+  CONSTRAINT FkidUserUR FOREIGN KEY (user_id) REFERENCES users (id),
+  CONSTRAINT FKidProgramUR FOREIGN KEY (role_id) REFERENCES roles (id)
 );
 
 -- admin

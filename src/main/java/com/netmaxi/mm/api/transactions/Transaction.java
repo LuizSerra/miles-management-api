@@ -30,21 +30,17 @@ public class Transaction {
 	@Temporal(TemporalType.DATE)
 	private LocalDate date;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "transaction_type")
-	private TransactionType transactionType;
-
 	private Integer amount;
 
 	private BigDecimal price;
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "transaction_type")
+	private TransactionType transactionType;
 	
 	@ManyToOne
-	@JoinColumn(name = "source_program_id")
-	private Program sourceProgram;
-
-	@ManyToOne
-	@JoinColumn(name = "target_program_id")
-	private Program targetProgram;
+	@JoinColumn(name = "program_id")
+	private Program program;
 
 	public Transaction() {
 		super();
@@ -52,11 +48,10 @@ public class Transaction {
 
 	public Transaction(TransactionRequestDTO transactionRequestDTO) {
 		this.date = transactionRequestDTO.date();
-		this.transactionType  = transactionRequestDTO.transactionType();
 		this.amount = transactionRequestDTO.amount();
 		this.price = transactionRequestDTO.value();
-		this.sourceProgram = transactionRequestDTO.sourceProgram();
-		this.targetProgram = transactionRequestDTO.targetProgram();
+		this.transactionType  = transactionRequestDTO.transactionType();
+		this.program = transactionRequestDTO.program();
 	}
 
 	public Long getId() {
@@ -75,14 +70,6 @@ public class Transaction {
 		this.date = date;
 	}
 
-	public TransactionType getTransactionType() {
-		return transactionType;
-	}
-
-	public void setTransactionType(TransactionType transactionType) {
-		this.transactionType = transactionType;
-	}
-
 	public Integer getAmount() {
 		return amount;
 	}
@@ -91,28 +78,28 @@ public class Transaction {
 		this.amount = amount;
 	}
 
-	public BigDecimal getValue() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setValue(BigDecimal value) {
-		this.price = value;
+	public void setPrice(BigDecimal price) {
+		this.price = price;
 	}
 
-	public Program getSourceProgram() {
-		return sourceProgram;
+	public TransactionType getTransactionType() {
+		return transactionType;
 	}
 
-	public void setSourceProgram(Program sourceProgram) {
-		this.sourceProgram = sourceProgram;
+	public void setTransactionType(TransactionType transactionType) {
+		this.transactionType = transactionType;
 	}
 
-	public Program getTargetProgram() {
-		return targetProgram;
+	public Program getProgram() {
+		return program;
 	}
 
-	public void setTargetProgram(Program targetProgram) {
-		this.targetProgram = targetProgram;
+	public void setProgram(Program program) {
+		this.program = program;
 	}
 
 }

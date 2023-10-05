@@ -10,5 +10,7 @@ public record ProgramRequestDTO (
 		
 		Integer balance,
 		
-		Integer balanceAvailable
+		Integer balanceAvailable,
+		
+		Long user
 		) {}

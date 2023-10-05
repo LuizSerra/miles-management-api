@@ -15,6 +15,8 @@ public interface ProgramService {
 	
 	public Program findById(Long id);
 	
+	public Page<Program> listByUser(Long userID, Pageable pageable);
+	
 	public Program update(ProgramModifyDTO programDTO);
 	
 	public Boolean validateTransaction(Program programa, Integer value) throws Exception;

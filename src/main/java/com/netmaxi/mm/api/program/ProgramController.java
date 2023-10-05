@@ -47,6 +47,12 @@ public class ProgramController {
 		var page = programaService.list(pag);
 		return ResponseEntity.ok(page.map(ProgramResponseDTO::new));
 	}
+	
+	@GetMapping("/user/{id}")
+	public ResponseEntity<Page<ProgramResponseDTO>> listByUser(@PageableDefault(size = 10, sort = {"name"}) Pageable pag, @PathVariable Long id){
+		var page = programaService.listByUser(id, pag);
+		return ResponseEntity.ok(page.map(ProgramResponseDTO::new));
+	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ProgramResponseDTO> findById(@PathVariable Long id){
