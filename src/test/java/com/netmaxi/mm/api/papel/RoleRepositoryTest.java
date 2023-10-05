@@ -2,11 +2,11 @@ package com.netmaxi.mm.api.papel;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 import com.netmaxi.mm.api.role.Role;
@@ -21,8 +21,9 @@ class RoleRepositoryTest {
 
 	@Test
 	void testFindAllPageable() {
-		List<Role> roles = repo.findAll();
-		assertTrue(roles.size() > 0);
+		Pageable pagination = Pageable.ofSize(1);
+		Page<Role> roles = repo.findAll(pagination);
+		assertTrue(roles.getNumberOfElements() > 0);
 	}
 
 	

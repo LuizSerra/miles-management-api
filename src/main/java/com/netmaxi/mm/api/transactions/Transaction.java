@@ -36,7 +36,7 @@ public class Transaction {
 
 	private Integer amount;
 
-	private BigDecimal value;
+	private BigDecimal price;
 	
 	@ManyToOne
 	@JoinColumn(name = "source_program_id")
@@ -54,7 +54,7 @@ public class Transaction {
 		this.date = transactionRequestDTO.date();
 		this.transactionType  = transactionRequestDTO.transactionType();
 		this.amount = transactionRequestDTO.amount();
-		this.value = transactionRequestDTO.value();
+		this.price = transactionRequestDTO.value();
 		this.sourceProgram = transactionRequestDTO.sourceProgram();
 		this.targetProgram = transactionRequestDTO.targetProgram();
 	}
@@ -92,11 +92,11 @@ public class Transaction {
 	}
 
 	public BigDecimal getValue() {
-		return value;
+		return price;
 	}
 
 	public void setValue(BigDecimal value) {
-		this.value = value;
+		this.price = value;
 	}
 
 	public Program getSourceProgram() {

@@ -1,9 +1,9 @@
 CREATE TABLE transactions (
   id bigint NOT NULL AUTO_INCREMENT UNIQUE,
-  data date NOT NULL,
+  date date NOT NULL,
   transaction_type varchar(20) NOT NULL,
   amount int,
-  value decimal(15,2),
+  price decimal(15,2),
   source_program_id bigint,
   target_program_id bigint,
   

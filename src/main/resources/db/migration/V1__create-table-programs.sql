@@ -10,4 +10,4 @@ primary key(id)
  
 );
 
-INSERT INTO programs(name, description, balance, balance_available) VALUES ("LIVELO", "Programa de Pontos Livelo", 3000, 1000);
+INSERT INTO programs(name, description, balance, balance_available) VALUES ('LIVELO', 'Programa de Pontos Livelo', 3000, 1000);

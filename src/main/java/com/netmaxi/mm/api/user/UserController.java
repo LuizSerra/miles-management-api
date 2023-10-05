@@ -43,7 +43,7 @@ public class UserController {
 	}
 	
 	@GetMapping
-	public ResponseEntity<Page<User>> list(@PageableDefault(size = 10, sort = {"name"}) Pageable pag){
+	public ResponseEntity<Page<User>> list(@PageableDefault(size = 10) Pageable pag){
 	    Page<User> page = usuarioService.list(pag);
 	    return ResponseEntity.ok(page);
 	}
