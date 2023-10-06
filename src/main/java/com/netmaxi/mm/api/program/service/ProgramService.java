@@ -10,7 +10,7 @@ import com.netmaxi.mm.api.program.dto.ProgramResponseDTO;
 
 public interface ProgramService {
 	
-	public ProgramResponseDTO create(ProgramRequestDTO programRequestDTO);
+	public ProgramResponseDTO create(ProgramRequestDTO programRequestDTO) throws Exception;
 	
 	public Page<ProgramResponseDTO> list(Pageable pag);
 	

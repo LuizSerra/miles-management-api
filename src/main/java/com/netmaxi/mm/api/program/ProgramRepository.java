@@ -9,4 +9,5 @@ import com.netmaxi.mm.api.user.User;
 public interface ProgramRepository extends JpaRepository<Program, Long> { 
 
 	Page<Program> findByUser(User user, Pageable pageable);
+	Program findByNameAndUser(String name, User user);
 }

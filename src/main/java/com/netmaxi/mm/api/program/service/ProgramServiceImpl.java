@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.netmaxi.mm.api.error.EntityAlreadyCreatedException;
 import com.netmaxi.mm.api.program.Program;
 import com.netmaxi.mm.api.program.ProgramRepository;
 import com.netmaxi.mm.api.program.dto.ProgramModifiedDTO;
@@ -25,9 +26,12 @@ public class ProgramServiceImpl implements ProgramService {
 	}
 
 	@Override
-	public ProgramResponseDTO create(ProgramRequestDTO programRequestDTO) {
+	public ProgramResponseDTO create(ProgramRequestDTO programRequestDTO) throws Exception {
 		Program program = new Program(programRequestDTO);
 		User user = userRepository.getReferenceById(programRequestDTO.user());
+		if(programRepository.findByNameAndUser(programRequestDTO.name(), user) != null) {
+			throw new EntityAlreadyCreatedException("A program with this name already exist for this user.");
+		}
 		program.setUser(user);
 		programRepository.save(program);
 		return new ProgramResponseDTO(program);

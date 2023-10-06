@@ -13,13 +13,23 @@ public class ErrorHandler {
 	
 	
 	@ExceptionHandler(EntityNotFoundException.class)
-	public ResponseEntity tratarErro404() {
+	public ResponseEntity handleErro404() {
 		return ResponseEntity.notFound().build();
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
-	public ResponseEntity tratarErro400(MethodArgumentNotValidException ex) {
+	public ResponseEntity handleErro400(MethodArgumentNotValidException ex) {
 		return ResponseEntity.badRequest().body(ex.getFieldErrors().stream().map(DadosErrosValidacao::new));
+	}
+	
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity handleIlleGalArgument(IllegalArgumentException ex) {
+		return ResponseEntity.badRequest().body(ex.getMessage());
+	}
+	
+	@ExceptionHandler(EntityAlreadyCreatedException.class)
+	public ResponseEntity handleEntityAlreadyCreated(EntityAlreadyCreatedException ex) {
+		return ResponseEntity.internalServerError().body(ex.getMessage());
 	}
 	
 	private record DadosErrosValidacao(String campo, String Mensagem) {

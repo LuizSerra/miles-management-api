@@ -36,7 +36,7 @@ public class ProgramController {
 
 	@PostMapping
 	@Transactional
-	public ResponseEntity<ProgramResponseDTO> create(@RequestBody @Valid ProgramRequestDTO programaRequestDTO,	UriComponentsBuilder uriBuilder) {
+	public ResponseEntity<ProgramResponseDTO> create(@RequestBody @Valid ProgramRequestDTO programaRequestDTO,	UriComponentsBuilder uriBuilder) throws Exception {
 		var programaCriado = programaService.create(programaRequestDTO);
 		URI uri = uriBuilder.path("/programas/{id}").buildAndExpand(programaCriado.id()).toUri();
 		return ResponseEntity.created(uri).body(programaCriado);
