@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.netmaxi.mm.api.role.Role;
 import com.netmaxi.mm.api.role.RoleRepository;
 import com.netmaxi.mm.api.role.dto.RoleRequestDTO;
+import com.netmaxi.mm.api.role.dto.RoleResponseDTO;
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -18,16 +19,16 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	public Role criar(RoleRequestDTO roleDTO) {
+	public RoleResponseDTO criar(RoleRequestDTO roleDTO) {
 		Role role = new Role(roleDTO);
 		roleRepository.save(role);
-		return role;
+		return new RoleResponseDTO(role);
 	}
 
 	@Override
-	public Page<Role> list(Pageable pag) {
+	public Page<RoleResponseDTO> list(Pageable pag) {
 		Page<Role> page = roleRepository.findAll(pag);
-		return page;
+		return page.map(RoleResponseDTO::new);
 	}
 
 }

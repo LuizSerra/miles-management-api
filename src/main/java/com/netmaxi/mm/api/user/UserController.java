@@ -37,9 +37,9 @@ public class UserController {
 	@PostMapping
 	@Transactional
 	public ResponseEntity<UserResponseDTO> create(@RequestBody @Valid UserRequestDTO usuarioDTO, UriComponentsBuilder uriBuilder) {
-		User userCreated =  usuarioService.create(usuarioDTO);
-		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(userCreated.getId()).toUri();
-		return ResponseEntity.created(uri).body(new UserResponseDTO(userCreated));
+		UserResponseDTO userCreated =  usuarioService.create(usuarioDTO);
+		URI uri = uriBuilder.path("/usuarios/{id}").buildAndExpand(userCreated.id()).toUri();
+		return ResponseEntity.created(uri).body(userCreated);
 	}
 	
 	@GetMapping
@@ -51,14 +51,14 @@ public class UserController {
 	@GetMapping("/{id}")
 	public ResponseEntity<UserResponseDTO> findById(@PathVariable Long id) throws Exception{
 		var usuario = usuarioService.findByID(id);
-		return ResponseEntity.ok(new UserResponseDTO(usuario));
+		return ResponseEntity.ok(usuario);
 	}
 	
 	@PutMapping
 	@Transactional
 	public ResponseEntity<UserModifiedDTO> atualizar(@RequestBody @Valid UserModifyDTO usuarioDTO) {
-		User usuarioAtualizado = usuarioService.update(usuarioDTO);
-		return ResponseEntity.ok(new UserModifiedDTO(usuarioAtualizado));
+		UserModifiedDTO usuarioAtualizado = usuarioService.update(usuarioDTO);
+		return ResponseEntity.ok(usuarioAtualizado);
 	}
 
 }

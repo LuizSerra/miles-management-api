@@ -33,23 +33,23 @@ public class TransactionController {
 
 	@PostMapping
 	@Transactional
-	public ResponseEntity<TransactionResponseDTO> create(@RequestBody @Valid TransactionRequestDTO operacaoDTO, UriComponentsBuilder uriBuilder) {
-		var operacaoCriada = operacaoService.create(operacaoDTO);
-		URI uri = uriBuilder.path("/operacoes/{id}").buildAndExpand(operacaoCriada.getId()).toUri();
-		return ResponseEntity.created(uri).body(new TransactionResponseDTO(operacaoCriada));
+	public ResponseEntity<TransactionResponseDTO> create(@RequestBody @Valid TransactionRequestDTO transactionDTO, UriComponentsBuilder uriBuilder) {
+		var transactionCreated = operacaoService.create(transactionDTO);
+		URI uri = uriBuilder.path("/operacoes/{id}").buildAndExpand(transactionCreated.id()).toUri();
+		return ResponseEntity.created(uri).body(transactionCreated);
 	}
 	
 	@GetMapping
 	public ResponseEntity<Page<TransactionResponseDTO>> list(@PageableDefault(size = 10, sort = {"data"}) Pageable pag){
 		var page =  operacaoService.list(pag);
-		return ResponseEntity.ok(page.map(TransactionResponseDTO::new));
+		return ResponseEntity.ok(page);
 	}
 
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<TransactionResponseDTO> findById(@PathVariable Long id){
 		var operacaoEncontrada = operacaoService.findByID(id);
-		return ResponseEntity.ok(new TransactionResponseDTO(operacaoEncontrada));
+		return ResponseEntity.ok(operacaoEncontrada);
 	}
 	
 }

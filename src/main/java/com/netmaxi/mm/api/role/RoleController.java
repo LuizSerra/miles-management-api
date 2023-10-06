@@ -33,15 +33,15 @@ public class RoleController {
 	@PostMapping
 	@Transactional
 	public ResponseEntity<RoleResponseDTO> create(@RequestBody @Valid RoleRequestDTO papelDTO, UriComponentsBuilder uriBuilder) {
-		Role createdRole = roleService.criar(papelDTO);
-		URI uri = uriBuilder.path("/roles/{id}").buildAndExpand(createdRole.getId()).toUri();
-		return ResponseEntity.created(uri).body(new RoleResponseDTO(createdRole));
+		var createdRole = roleService.criar(papelDTO);
+		URI uri = uriBuilder.path("/roles/{id}").buildAndExpand(createdRole.id()).toUri();
+		return ResponseEntity.created(uri).body(createdRole);
 	}
 	
 	@GetMapping
 	public ResponseEntity<Page<RoleResponseDTO>> list(@PageableDefault(size = 10, sort = {"name"}) Pageable pag){
-		Page<Role> returned =  roleService.list(pag);
-		return ResponseEntity.ok(returned.map(RoleResponseDTO::new));
+		Page<RoleResponseDTO> page =  roleService.list(pag);
+		return ResponseEntity.ok(page);
 	}
 
 }

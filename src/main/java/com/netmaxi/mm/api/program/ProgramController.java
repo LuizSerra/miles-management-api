@@ -38,32 +38,32 @@ public class ProgramController {
 	@Transactional
 	public ResponseEntity<ProgramResponseDTO> create(@RequestBody @Valid ProgramRequestDTO programaRequestDTO,	UriComponentsBuilder uriBuilder) {
 		var programaCriado = programaService.create(programaRequestDTO);
-		URI uri = uriBuilder.path("/programas/{id}").buildAndExpand(programaCriado.getId()).toUri();
-		return ResponseEntity.created(uri).body(new ProgramResponseDTO(programaCriado));
+		URI uri = uriBuilder.path("/programas/{id}").buildAndExpand(programaCriado.id()).toUri();
+		return ResponseEntity.created(uri).body(programaCriado);
 	}
 	
 	@GetMapping
 	public ResponseEntity<Page<ProgramResponseDTO>> list(@PageableDefault(size = 10, sort = {"name"}) Pageable pag){
 		var page = programaService.list(pag);
-		return ResponseEntity.ok(page.map(ProgramResponseDTO::new));
+		return ResponseEntity.ok(page);
 	}
 	
 	@GetMapping("/user/{id}")
 	public ResponseEntity<Page<ProgramResponseDTO>> listByUser(@PageableDefault(size = 10, sort = {"name"}) Pageable pag, @PathVariable Long id){
 		var page = programaService.listByUser(id, pag);
-		return ResponseEntity.ok(page.map(ProgramResponseDTO::new));
+		return ResponseEntity.ok(page);
 	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<ProgramResponseDTO> findById(@PathVariable Long id){
 		var programaEncontrado = programaService.findById(id);
-		return ResponseEntity.ok(new ProgramResponseDTO(programaEncontrado));
+		return ResponseEntity.ok(programaEncontrado);
 	}
 	
 	@PutMapping
 	@Transactional
 	public ResponseEntity<ProgramModifiedDTO> atualizar(@RequestBody @Valid ProgramModifyDTO programaDTO) {
 		var programaAtualizado = programaService.update(programaDTO);
-		return ResponseEntity.ok(new ProgramModifiedDTO(programaAtualizado));
+		return ResponseEntity.ok(programaAtualizado);
 	}
 }

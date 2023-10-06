@@ -6,60 +6,62 @@ import org.springframework.stereotype.Service;
 
 import com.netmaxi.mm.api.program.Program;
 import com.netmaxi.mm.api.program.ProgramRepository;
+import com.netmaxi.mm.api.program.dto.ProgramModifiedDTO;
 import com.netmaxi.mm.api.program.dto.ProgramModifyDTO;
 import com.netmaxi.mm.api.program.dto.ProgramRequestDTO;
+import com.netmaxi.mm.api.program.dto.ProgramResponseDTO;
 import com.netmaxi.mm.api.user.User;
-import com.netmaxi.mm.api.user.service.UserService;
+import com.netmaxi.mm.api.user.UserRepository;
 
 @Service
 public class ProgramServiceImpl implements ProgramService {
 	
 	private final ProgramRepository programRepository;
-	private final UserService userService;
+	private final UserRepository userRepository;
 	
-	public ProgramServiceImpl(ProgramRepository programaRepository, UserService userService) {
+	public ProgramServiceImpl(ProgramRepository programaRepository, UserRepository userRepository) {
 		this.programRepository = programaRepository;
-		this.userService = userService;
+		this.userRepository = userRepository;
 	}
 
 	@Override
-	public Program create(ProgramRequestDTO programRequestDTO) {
+	public ProgramResponseDTO create(ProgramRequestDTO programRequestDTO) {
 		Program program = new Program(programRequestDTO);
-		User user = userService.findByID(programRequestDTO.user());
+		User user = userRepository.getReferenceById(programRequestDTO.user());
 		program.setUser(user);
 		programRepository.save(program);
-		return program;
+		return new ProgramResponseDTO(program);
 	}
 
 	@Override
-	public Page<Program> list(Pageable pag) {
+	public Page<ProgramResponseDTO> list(Pageable pag) {
 		var page = programRepository.findAll(pag);
-		return page;
+		return page.map(ProgramResponseDTO::new);
 	}
 
 	@Override
-	public Page<Program> listByUser(Long userID, Pageable pageable) {
-		User user = userService.findByID(userID);
+	public Page<ProgramResponseDTO> listByUser(Long userID, Pageable pageable) {
+		User user = userRepository.getReferenceById(userID);
 		var page = programRepository.findByUser(user, pageable);
-		return page;
+		return page.map(ProgramResponseDTO::new);
 	}
 	
 	@Override
-	public Program findById(Long id) {
+	public ProgramResponseDTO findById(Long id) {
 		var programFound = programRepository.getReferenceById(id);
-		return programFound;
+		return new ProgramResponseDTO(programFound);
 	}
 
 	@Override
-	public Program update(ProgramModifyDTO programModifyDTO) {
-		var programFound = findById(programModifyDTO.id());
+	public ProgramModifiedDTO update(ProgramModifyDTO programModifyDTO) {
+		var programFound = programRepository.getReferenceById(programModifyDTO.id());
 		programFound.update(programModifyDTO);
-		return programFound;
+		return new ProgramModifiedDTO(programFound);
 	}
 
 	@Override
-	public Boolean validateTransaction(Program sourceProgram, Integer amount) throws Exception {
-		if(sourceProgram.getBalanceAvailable().compareTo(amount) < 0) {
+	public Boolean validateTransaction(ProgramRequestDTO programrequest, Integer amount) throws Exception {
+		if(programrequest.balanceAvailable().compareTo(amount) < 0) {
 			throw new Exception("The balance is not enough to complete the transaction");
 		}
 		return Boolean.TRUE;
