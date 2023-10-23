@@ -5,21 +5,18 @@ import org.springframework.stereotype.Service;
 import com.netmaxi.mm.api.program.ProgramRepository;
 import com.netmaxi.mm.api.program.service.ProgramService;
 import com.netmaxi.mm.api.transactions.Transaction;
-import com.netmaxi.mm.api.transactions.TransactionRepository;
 import com.netmaxi.mm.api.transactions.dto.TransactionRequestDTO;
 import com.netmaxi.mm.api.user.UserRepository;
 
 @Service
 public class TransferenceTransactionStrategy implements TransactionStrategy {
 
-	private final TransactionRepository transactionRepository;
 	private final ProgramRepository programRepository;
 	private final UserRepository userRepository;
 	private final ProgramService programService;
 	
 	
-	public TransferenceTransactionStrategy(TransactionRepository transactionRepository, ProgramRepository programRepository, UserRepository userRepository, ProgramService programService) {
-		this.transactionRepository = transactionRepository;
+	public TransferenceTransactionStrategy(ProgramRepository programRepository, UserRepository userRepository, ProgramService programService) {
 		this.programRepository = programRepository;
 		this.userRepository = userRepository;
 		this.programService = programService;
