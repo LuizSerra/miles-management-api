@@ -11,5 +11,8 @@ public record ProgramModifyDTO(
 		Integer balanceAvailable
 		
 		) {
-
+	public ProgramModifyDTO(ProgramResponseDTO prog) {
+		this(prog.id(), prog.name(), prog.description(), prog.balance(), prog.balanceAvailable());
+	}
+	
 }

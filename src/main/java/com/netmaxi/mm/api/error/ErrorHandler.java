@@ -1,5 +1,6 @@
 package com.netmaxi.mm.api.error;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -13,8 +14,8 @@ public class ErrorHandler {
 	
 	
 	@ExceptionHandler(EntityNotFoundException.class)
-	public ResponseEntity handleErro404() {
-		return ResponseEntity.notFound().build();
+	public ResponseEntity handleErro404(EntityNotFoundException ex) {
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
@@ -29,6 +30,11 @@ public class ErrorHandler {
 	
 	@ExceptionHandler(EntityAlreadyCreatedException.class)
 	public ResponseEntity handleEntityAlreadyCreated(EntityAlreadyCreatedException ex) {
+		return ResponseEntity.internalServerError().body(ex.getMessage());
+	}
+	
+	@ExceptionHandler(TransactionBusinessException.class)
+	public ResponseEntity handleTransactionBusinsess(TransactionBusinessException ex) {
 		return ResponseEntity.internalServerError().body(ex.getMessage());
 	}
 	

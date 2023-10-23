@@ -3,8 +3,12 @@ package com.netmaxi.mm.api.transactions;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import org.hibernate.annotations.CreationTimestamp;
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.netmaxi.mm.api.program.Program;
 import com.netmaxi.mm.api.transactions.dto.TransactionRequestDTO;
+import com.netmaxi.mm.api.user.User;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -26,7 +30,8 @@ public class Transaction {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-
+	
+	@CreationTimestamp
 	@Temporal(TemporalType.DATE)
 	private LocalDate date;
 
@@ -39,9 +44,18 @@ public class Transaction {
 	private TransactionType transactionType;
 	
 	@ManyToOne
-	@JoinColumn(name = "program_id")
-	private Program program;
+	@JoinColumn(name = "program_sender_id")
+	private Program programSender;
+	
+	@ManyToOne
+	@JoinColumn(name = "program_receiver_id")
+	private Program programReceiver;
 
+	@ManyToOne
+	@JoinColumn(name = "user_id")
+	@JsonBackReference
+	private User user;
+	
 	public Transaction() {
 		super();
 	}
@@ -49,9 +63,8 @@ public class Transaction {
 	public Transaction(TransactionRequestDTO transactionRequestDTO) {
 		this.date = transactionRequestDTO.date();
 		this.amount = transactionRequestDTO.amount();
-		this.price = transactionRequestDTO.value();
+		this.price = transactionRequestDTO.price();
 		this.transactionType  = transactionRequestDTO.transactionType();
-		this.program = transactionRequestDTO.program();
 	}
 
 	public Long getId() {
@@ -94,12 +107,28 @@ public class Transaction {
 		this.transactionType = transactionType;
 	}
 
-	public Program getProgram() {
-		return program;
+	public Program getProgramSender() {
+		return programSender;
 	}
 
-	public void setProgram(Program program) {
-		this.program = program;
+	public void setProgramSender(Program programSender) {
+		this.programSender = programSender;
+	}
+
+	public Program getProgramReceiver() {
+		return programReceiver;
+	}
+
+	public void setProgramReceiver(Program programReceiver) {
+		this.programReceiver = programReceiver;
+	}
+
+	public User getUser() {
+		return user;
+	}
+
+	public void setUser(User user) {
+		this.user = user;
 	}
 
 }

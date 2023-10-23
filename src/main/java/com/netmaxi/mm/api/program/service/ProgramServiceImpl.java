@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.netmaxi.mm.api.error.EntityAlreadyCreatedException;
+import com.netmaxi.mm.api.error.TransactionBusinessException;
 import com.netmaxi.mm.api.program.Program;
 import com.netmaxi.mm.api.program.ProgramRepository;
 import com.netmaxi.mm.api.program.dto.ProgramModifiedDTO;
@@ -64,11 +65,10 @@ public class ProgramServiceImpl implements ProgramService {
 	}
 
 	@Override
-	public Boolean validateTransaction(ProgramRequestDTO programrequest, Integer amount) throws Exception {
-		if(programrequest.balanceAvailable().compareTo(amount) < 0) {
-			throw new Exception("The balance is not enough to complete the transaction");
+	public void validateTransaction(Program program, Integer amount) throws TransactionBusinessException {
+		if(program.getBalanceAvailable().compareTo(amount) < 0) {
+			throw new TransactionBusinessException("The balance is not enough to complete the transaction");
 		}
-		return Boolean.TRUE;
 	}
 
 }

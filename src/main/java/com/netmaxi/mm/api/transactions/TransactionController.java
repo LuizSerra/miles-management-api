@@ -25,30 +25,30 @@ import jakarta.validation.Valid;
 @RequestMapping("/transactions")
 public class TransactionController {
 
-	private final TransactionService operacaoService;
+	private final TransactionService transactionService;
 	
 	public TransactionController(TransactionService operacaoService) {
-		this.operacaoService = operacaoService;
+		this.transactionService = operacaoService;
 	}
 
 	@PostMapping
 	@Transactional
 	public ResponseEntity<TransactionResponseDTO> create(@RequestBody @Valid TransactionRequestDTO transactionDTO, UriComponentsBuilder uriBuilder) {
-		var transactionCreated = operacaoService.create(transactionDTO);
+		var transactionCreated = transactionService.create(transactionDTO);
 		URI uri = uriBuilder.path("/operacoes/{id}").buildAndExpand(transactionCreated.id()).toUri();
 		return ResponseEntity.created(uri).body(transactionCreated);
 	}
 	
 	@GetMapping
 	public ResponseEntity<Page<TransactionResponseDTO>> list(@PageableDefault(size = 10, sort = {"data"}) Pageable pag){
-		var page =  operacaoService.list(pag);
+		var page =  transactionService.list(pag);
 		return ResponseEntity.ok(page);
 	}
 
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<TransactionResponseDTO> findById(@PathVariable Long id){
-		var operacaoEncontrada = operacaoService.findByID(id);
+		var operacaoEncontrada = transactionService.findByID(id);
 		return ResponseEntity.ok(operacaoEncontrada);
 	}
 	
