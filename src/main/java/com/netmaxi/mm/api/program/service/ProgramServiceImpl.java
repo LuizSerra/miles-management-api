@@ -65,8 +65,8 @@ public class ProgramServiceImpl implements ProgramService {
 	}
 
 	@Override
-	public void validateTransaction(Program program, Integer amount) throws TransactionBusinessException {
-		if(program.getBalanceAvailable().compareTo(amount) < 0) {
+	public void validateTransaction(Integer balance, Integer amount) throws TransactionBusinessException {
+		if(balance.compareTo(amount) < 0) {
 			throw new TransactionBusinessException("The balance is not enough to complete the transaction");
 		}
 	}

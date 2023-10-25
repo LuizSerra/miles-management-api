@@ -4,7 +4,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.netmaxi.mm.api.error.TransactionBusinessException;
-import com.netmaxi.mm.api.program.Program;
 import com.netmaxi.mm.api.program.dto.ProgramModifiedDTO;
 import com.netmaxi.mm.api.program.dto.ProgramModifyDTO;
 import com.netmaxi.mm.api.program.dto.ProgramRequestDTO;
@@ -22,6 +21,6 @@ public interface ProgramService {
 	
 	public ProgramModifiedDTO update(ProgramModifyDTO programDTO);
 	
-	public void validateTransaction(Program programa, Integer value) throws TransactionBusinessException;
+	public void validateTransaction(Integer balance, Integer value) throws TransactionBusinessException;
 
 }
