@@ -20,7 +20,7 @@ class RoleRepositoryTest {
 	RoleRepository repo;
 
 	@Test
-	void testFindAllPageable() {
+	void testShouldFindAllRolesPageable() {
 		Pageable pagination = Pageable.ofSize(1);
 		Page<Role> roles = repo.findAll(pagination);
 		assertTrue(roles.getNumberOfElements() > 0);
@@ -28,7 +28,7 @@ class RoleRepositoryTest {
 
 	
 	@Test
-	void testCreate(){
+	void testShouldCreateRoleWithSpecificName(){
 		Role role = new Role();
 		role.setName("Role_OWNER");
 		Role createdRole = repo.save(role);
