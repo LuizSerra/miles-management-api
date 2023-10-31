@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.netmaxi.mm.api.error.ValidationException;
 import com.netmaxi.mm.api.role.Role;
 import com.netmaxi.mm.api.role.RoleRepository;
 import com.netmaxi.mm.api.user.User;
@@ -14,6 +15,8 @@ import com.netmaxi.mm.api.user.dto.UserModifiedDTO;
 import com.netmaxi.mm.api.user.dto.UserModifyDTO;
 import com.netmaxi.mm.api.user.dto.UserRequestDTO;
 import com.netmaxi.mm.api.user.dto.UserResponseDTO;
+
+
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -28,6 +31,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserResponseDTO create(UserRequestDTO userRequestDTO) {
+		if(userRepository.findByEmailIgnoreCase(userRequestDTO.email()) != null) throw new ValidationException("A user with this e-mail is already created");
 		User user = new User(userRequestDTO);
 		List<Role> roles = roleRepository.findAllById(userRequestDTO.roles()); 
 		user.setRoles(roles);

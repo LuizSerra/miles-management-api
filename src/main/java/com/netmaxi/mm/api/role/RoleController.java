@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,8 +33,8 @@ public class RoleController {
 	
 	@PostMapping
 	@Transactional
-	public ResponseEntity<RoleResponseDTO> create(@RequestBody @Valid RoleRequestDTO papelDTO, UriComponentsBuilder uriBuilder) {
-		var createdRole = roleService.criar(papelDTO);
+	public ResponseEntity<RoleResponseDTO> create(@RequestBody @Valid RoleRequestDTO roleRequestDTO, UriComponentsBuilder uriBuilder) {
+		var createdRole = roleService.create(roleRequestDTO);
 		URI uri = uriBuilder.path("/roles/{id}").buildAndExpand(createdRole.id()).toUri();
 		return ResponseEntity.created(uri).body(createdRole);
 	}
@@ -42,6 +43,12 @@ public class RoleController {
 	public ResponseEntity<Page<RoleResponseDTO>> list(@PageableDefault(size = 10, sort = {"name"}) Pageable pag){
 		Page<RoleResponseDTO> page =  roleService.list(pag);
 		return ResponseEntity.ok(page);
+	}
+	
+	@GetMapping("/name/{name}")
+	public ResponseEntity<RoleResponseDTO> findByName(@PathVariable String name) {
+		var found = roleService.findByName(name);
+		return found != null ? ResponseEntity.ok(found) : ResponseEntity.notFound().build();
 	}
 
 }

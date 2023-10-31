@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import com.netmaxi.mm.api.error.ValidationException;
 import com.netmaxi.mm.api.role.Role;
 import com.netmaxi.mm.api.role.RoleRepository;
 import com.netmaxi.mm.api.role.dto.RoleRequestDTO;
@@ -19,7 +20,10 @@ public class RoleServiceImpl implements RoleService {
 	}
 
 	@Override
-	public RoleResponseDTO criar(RoleRequestDTO roleDTO) {
+	public RoleResponseDTO create(RoleRequestDTO roleDTO) {
+		
+		if (findByName(roleDTO.name()) != null) throw new ValidationException("A role with this name is already created.");
+		
 		Role role = new Role(roleDTO);
 		roleRepository.save(role);
 		return new RoleResponseDTO(role);
@@ -30,5 +34,11 @@ public class RoleServiceImpl implements RoleService {
 		Page<Role> page = roleRepository.findAll(pag);
 		return page.map(RoleResponseDTO::new);
 	}
-
+	
+	@Override
+	public RoleResponseDTO findByName(String name) {
+		Role role =	roleRepository.findByNameIgnoreCase(name);
+		return role != null ? new RoleResponseDTO(role) : null;
+	}
+	
 }

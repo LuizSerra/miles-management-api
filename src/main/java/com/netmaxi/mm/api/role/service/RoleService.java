@@ -8,8 +8,10 @@ import com.netmaxi.mm.api.role.dto.RoleResponseDTO;
 
 public interface RoleService {
 	
-	public RoleResponseDTO criar(RoleRequestDTO roleDTO);
+	public RoleResponseDTO create(RoleRequestDTO roleDTO);
 	
 	public Page<RoleResponseDTO> list(Pageable pag);
+	
+	public RoleResponseDTO findByName(String name);
 
 }

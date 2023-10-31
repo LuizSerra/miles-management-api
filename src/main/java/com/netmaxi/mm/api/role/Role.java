@@ -2,6 +2,7 @@ package com.netmaxi.mm.api.role;
 
 import com.netmaxi.mm.api.role.dto.RoleRequestDTO;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -16,6 +17,7 @@ public class Role {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@Column(nullable = false, unique = true)
 	private String name;
 	
 	public Role() {

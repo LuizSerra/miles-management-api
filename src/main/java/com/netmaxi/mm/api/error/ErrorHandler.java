@@ -28,9 +28,9 @@ public class ErrorHandler {
 		return ResponseEntity.badRequest().body(ex.getMessage());
 	}
 	
-	@ExceptionHandler(EntityAlreadyCreatedException.class)
-	public ResponseEntity handleEntityAlreadyCreated(EntityAlreadyCreatedException ex) {
-		return ResponseEntity.internalServerError().body(ex.getMessage());
+	@ExceptionHandler(ValidationException.class)
+	public ResponseEntity handleValidation(ValidationException ex) {
+		return ResponseEntity.badRequest().body(ex.getMessage());
 	}
 	
 	@ExceptionHandler(TransactionBusinessException.class)
