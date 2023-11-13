@@ -1,7 +1,5 @@
 package com.netmaxi.mm.api.transactions.strategy;
 
-import java.math.BigDecimal;
-
 import org.springframework.stereotype.Service;
 
 import com.netmaxi.mm.api.miles.Miles;
