@@ -6,6 +6,7 @@ import java.time.LocalDate;
 import org.hibernate.annotations.CreationTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.netmaxi.mm.api.miles.Miles;
 import com.netmaxi.mm.api.program.Program;
 import com.netmaxi.mm.api.transactions.dto.TransactionRequestDTO;
 import com.netmaxi.mm.api.user.User;
@@ -19,6 +20,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
@@ -34,10 +36,17 @@ public class Transaction {
 	@CreationTimestamp
 	@Temporal(TemporalType.DATE)
 	private LocalDate date;
+	
+	@Temporal(TemporalType.DATE)
+	private LocalDate expiration;
 
 	private Integer amount;
 
 	private BigDecimal price;
+	
+	@OneToOne
+	@JoinColumn(name = "miles_id")
+	private Miles miles;
 
 	@Enumerated(EnumType.STRING)
 	@Column(name = "transaction_type")
@@ -62,6 +71,7 @@ public class Transaction {
 
 	public Transaction(TransactionRequestDTO transactionRequestDTO) {
 		this.date = transactionRequestDTO.date();
+		this.expiration = transactionRequestDTO.expiration();
 		this.amount = transactionRequestDTO.amount();
 		this.price = transactionRequestDTO.price();
 		this.transactionType  = transactionRequestDTO.transactionType();
@@ -83,6 +93,14 @@ public class Transaction {
 		this.date = date;
 	}
 
+	public LocalDate getExpiration() {
+		return expiration;
+	}
+
+	public void setExpiration(LocalDate expiration) {
+		this.expiration = expiration;
+	}
+
 	public Integer getAmount() {
 		return amount;
 	}
@@ -97,6 +115,14 @@ public class Transaction {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public Miles getMiles() {
+		return miles;
+	}
+
+	public void setMiles(Miles miles) {
+		this.miles = miles;
 	}
 
 	public TransactionType getTransactionType() {
