@@ -33,12 +33,12 @@ public class PurchaseTransactionStrategy implements TransactionStrategy {
 				.orElseThrow(() -> new IllegalArgumentException("Program sender must be informed."));
 		
 		Miles miles = new Miles(transactionRequestDTO.amount(), transactionRequestDTO.price(), transactionRequestDTO.expiration(), sender);
-		miles = milesRepository.save(miles);
 		
-		miles.setProgram(sender);
 		sender.setBalance(sender.getBalance() + transactionRequestDTO.amount());
 		sender.setBalanceAvailable(sender.getBalanceAvailable() + transactionRequestDTO.amount());
 
+		miles.setProgram(sender);
+		miles = milesRepository.save(miles);
 						
 		Transaction transaction = new Transaction(transactionRequestDTO);
 		transaction.setProgramSender(sender);
