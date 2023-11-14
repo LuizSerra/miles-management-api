@@ -1,11 +1,16 @@
 package com.netmaxi.mm.api.program.service;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.netmaxi.mm.api.error.TransactionBusinessException;
 import com.netmaxi.mm.api.error.ValidationException;
+import com.netmaxi.mm.api.miles.Miles;
+import com.netmaxi.mm.api.miles.MilesRepository;
 import com.netmaxi.mm.api.program.Program;
 import com.netmaxi.mm.api.program.ProgramRepository;
 import com.netmaxi.mm.api.program.dto.ProgramModifiedDTO;
@@ -20,10 +25,13 @@ public class ProgramServiceImpl implements ProgramService {
 	
 	private final ProgramRepository programRepository;
 	private final UserRepository userRepository;
+	private final MilesRepository milesRepository;
 	
-	public ProgramServiceImpl(ProgramRepository programaRepository, UserRepository userRepository) {
-		this.programRepository = programaRepository;
+	public ProgramServiceImpl(ProgramRepository programRepository, UserRepository userRepository,
+			MilesRepository milesRepository) {
+		this.programRepository = programRepository;
 		this.userRepository = userRepository;
+		this.milesRepository = milesRepository;
 	}
 
 	@Override
@@ -34,7 +42,9 @@ public class ProgramServiceImpl implements ProgramService {
 			throw new ValidationException("A program with this name already exist for this user.");
 		}
 		program.setUser(user);
-		
+		Miles miles = new Miles(programRequestDTO.balanceAvailable(), BigDecimal.ZERO, LocalDate.now().plusYears(10), program);
+		milesRepository.save(miles);
+		program.getMiles().add(miles);
 		programRepository.save(program);
 		return new ProgramResponseDTO(program);
 	}

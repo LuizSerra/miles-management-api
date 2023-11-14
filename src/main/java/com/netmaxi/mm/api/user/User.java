@@ -2,6 +2,7 @@ package com.netmaxi.mm.api.user;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.netmaxi.mm.api.program.Program;
@@ -129,4 +130,23 @@ public class User {
 		if(userModifyDTO.password() != null) this.password = userModifyDTO.password();
 		
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(email, id, name);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		User other = (User) obj;
+		return Objects.equals(email, other.email) && Objects.equals(id, other.id) && Objects.equals(name, other.name);
+	}
+	
+	
 }

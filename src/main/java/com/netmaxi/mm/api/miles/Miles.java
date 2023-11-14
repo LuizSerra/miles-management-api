@@ -2,6 +2,7 @@ package com.netmaxi.mm.api.miles;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.netmaxi.mm.api.miles.dto.MilesModifyDTO;
@@ -110,6 +111,23 @@ public class Miles {
 
 	public void setProgram(Program program) {
 		this.program = program;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id, program);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Miles other = (Miles) obj;
+		return Objects.equals(id, other.id) && Objects.equals(program, other.program);
 	}
 	
 }
