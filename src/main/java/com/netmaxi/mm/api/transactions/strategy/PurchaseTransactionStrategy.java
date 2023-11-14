@@ -38,6 +38,8 @@ public class PurchaseTransactionStrategy implements TransactionStrategy {
 		sender.setBalanceAvailable(sender.getBalanceAvailable() + transactionRequestDTO.amount());
 
 		miles.setProgram(sender);
+		sender.getMiles().add(miles);
+		programRepository.save(sender);
 		miles = milesRepository.save(miles);
 						
 		Transaction transaction = new Transaction(transactionRequestDTO);

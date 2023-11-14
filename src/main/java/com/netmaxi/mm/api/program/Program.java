@@ -1,6 +1,11 @@
 package com.netmaxi.mm.api.program;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.netmaxi.mm.api.miles.Miles;
 import com.netmaxi.mm.api.program.dto.ProgramModifyDTO;
 import com.netmaxi.mm.api.program.dto.ProgramRequestDTO;
 import com.netmaxi.mm.api.user.User;
@@ -12,6 +17,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
 
@@ -32,6 +38,10 @@ public class Program {
 	@JsonBackReference
 	private User user;
 	
+	@OneToMany(mappedBy="program")
+	@JsonManagedReference 
+	private List<Miles> miles = new ArrayList<>();
+	
 	public Program() {}
 	
 	public Program(ProgramRequestDTO programRequestDTO) {
@@ -39,6 +49,19 @@ public class Program {
 		this.description = programRequestDTO.description();
 		this.balance = programRequestDTO.balance();
 		this.balanceAvailable = programRequestDTO.balanceAvailable();
+	}
+
+	
+	public void update(@Valid ProgramModifyDTO programUpdated) {
+		
+		if(programUpdated.name() != null) this.name = programUpdated.name();
+		
+		if(programUpdated.description() != null) this.description = programUpdated.description();
+		
+		if(programUpdated.balance() != null) this.balance = programUpdated.balance();
+		
+		if(programUpdated.balanceAvailable() != null) this.balanceAvailable = programUpdated.balanceAvailable();
+		
 	}
 
 	public Long getId() {
@@ -80,7 +103,7 @@ public class Program {
 	public void setBalanceAvailable(Integer balanceAvailable) {
 		this.balanceAvailable = balanceAvailable;
 	}
-	
+
 	public User getUser() {
 		return user;
 	}
@@ -89,16 +112,11 @@ public class Program {
 		this.user = user;
 	}
 
-	public void update(@Valid ProgramModifyDTO programUpdated) {
-		
-		if(programUpdated.name() != null) this.name = programUpdated.name();
-		
-		if(programUpdated.description() != null) this.description = programUpdated.description();
-		
-		if(programUpdated.balance() != null) this.balance = programUpdated.balance();
-		
-		if(programUpdated.balanceAvailable() != null) this.balanceAvailable = programUpdated.balanceAvailable();
-		
+	public List<Miles> getMiles() {
+		return miles;
 	}
 
+	public void setMiles(List<Miles> miles) {
+		this.miles = miles;
+	}
 }

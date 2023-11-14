@@ -34,6 +34,7 @@ public class ProgramServiceImpl implements ProgramService {
 			throw new ValidationException("A program with this name already exist for this user.");
 		}
 		program.setUser(user);
+		
 		programRepository.save(program);
 		return new ProgramResponseDTO(program);
 	}

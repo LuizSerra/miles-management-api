@@ -3,6 +3,7 @@ package com.netmaxi.mm.api.miles;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.netmaxi.mm.api.miles.dto.MilesModifyDTO;
 import com.netmaxi.mm.api.miles.dto.MilesRequestDTO;
 import com.netmaxi.mm.api.miles.dto.MilesResponseDTO;
@@ -33,6 +34,7 @@ public class Miles {
 	
 	@ManyToOne
 	@JoinColumn(name = "program_id", referencedColumnName = "id")
+	@JsonBackReference
 	private Program program;
 	
 	public Miles() {}
