@@ -13,8 +13,11 @@ import com.netmaxi.mm.api.program.Program;
 public interface MilesRepository extends JpaRepository<Miles, Long> { 
 	Page<Miles> findByProgram(Program program, Pageable pageable);
 	
-	@Query("SELECT m FROM Miles m " +
-	           "WHERE m.program.id = :programId " +
-	           "AND m.expiration >= :currentDate ")
+	@Query("""
+			SELECT m FROM Miles m 
+			WHERE m.program.id = :programId 
+			AND m.expiration >= :currentDate
+			AND m.amount>0 
+			""")
 	    List<Miles> findMilesBasedOnCriteria(Long programId, LocalDate currentDate);
 }
