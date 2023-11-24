@@ -24,7 +24,9 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import lombok.Data;
 
+@Data
 @Entity
 @Table(name = "transactions")
 public class Transaction {
@@ -76,85 +78,4 @@ public class Transaction {
 		this.price = transactionRequestDTO.price();
 		this.transactionType  = transactionRequestDTO.transactionType();
 	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public LocalDate getDate() {
-		return date;
-	}
-
-	public void setDate(LocalDate date) {
-		this.date = date;
-	}
-
-	public LocalDate getExpiration() {
-		return expiration;
-	}
-
-	public void setExpiration(LocalDate expiration) {
-		this.expiration = expiration;
-	}
-
-	public Integer getAmount() {
-		return amount;
-	}
-
-	public void setAmount(Integer amount) {
-		this.amount = amount;
-	}
-
-	public BigDecimal getPrice() {
-		return price;
-	}
-
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
-
-	public Miles getMiles() {
-		return miles;
-	}
-
-	public void setMiles(Miles miles) {
-		this.miles = miles;
-	}
-
-	public TransactionType getTransactionType() {
-		return transactionType;
-	}
-
-	public void setTransactionType(TransactionType transactionType) {
-		this.transactionType = transactionType;
-	}
-
-	public Program getProgramSender() {
-		return programSender;
-	}
-
-	public void setProgramSender(Program programSender) {
-		this.programSender = programSender;
-	}
-
-	public Program getProgramReceiver() {
-		return programReceiver;
-	}
-
-	public void setProgramReceiver(Program programReceiver) {
-		this.programReceiver = programReceiver;
-	}
-
-	public User getUser() {
-		return user;
-	}
-
-	public void setUser(User user) {
-		this.user = user;
-	}
-
 }

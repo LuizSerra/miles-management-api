@@ -9,6 +9,9 @@ import com.netmaxi.mm.api.transactions.Transaction;
 import com.netmaxi.mm.api.transactions.dto.TransactionRequestDTO;
 import com.netmaxi.mm.api.user.UserRepository;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Service
 public class BonificationTransactionStrategy implements TransactionStrategy {
 
@@ -27,11 +30,13 @@ public class BonificationTransactionStrategy implements TransactionStrategy {
 	
 	@Override
 	public Transaction execute(TransactionRequestDTO transactionRequestDTO) {
-		
+		log.info("TRANSACTION BONIFICATION:::START");
 		var user = this.userRepository.findById(transactionRequestDTO.user())
 				.orElseThrow(() -> new IllegalArgumentException("User must be informed."));
+		log.info("TRANSACTION BONIFICATION:::USER FOUND: {}", user);
 		var sender = this.programRepository.findById(transactionRequestDTO.programSender())
 				.orElseThrow(() -> new IllegalArgumentException("Program sender must be informed."));
+		log.info("TRANSACTION BONIFICATION::: PROGRAM SENDER FOUND: {}", sender);
 				
 		Miles miles = new Miles(transactionRequestDTO.amount(), transactionRequestDTO.price(), transactionRequestDTO.expiration(), sender);
 		
@@ -47,7 +52,7 @@ public class BonificationTransactionStrategy implements TransactionStrategy {
 		transaction.setProgramSender(sender);
 		transaction.setMiles(miles);
 		transaction.setUser(user);
-		
+		log.info("TRANSACTION BONIFICATION:::END:::TRANSACTION: {}", transaction);
 		return transaction;
 	}
 

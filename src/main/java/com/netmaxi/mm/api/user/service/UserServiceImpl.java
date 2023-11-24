@@ -16,8 +16,6 @@ import com.netmaxi.mm.api.user.dto.UserModifyDTO;
 import com.netmaxi.mm.api.user.dto.UserRequestDTO;
 import com.netmaxi.mm.api.user.dto.UserResponseDTO;
 
-
-
 @Service
 public class UserServiceImpl implements UserService {
 
