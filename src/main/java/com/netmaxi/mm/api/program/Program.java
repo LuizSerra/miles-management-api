@@ -20,9 +20,15 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.Valid;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(of = {"id", "name"})
+@ToString(exclude = {"user", "miles"})
 @Entity(name = "Program")
 @Table( name = "programs")
 public class Program {

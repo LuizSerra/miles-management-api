@@ -60,17 +60,19 @@ public class ProgramServiceImpl implements ProgramService {
 
 	@Override
 	public Page<ProgramResponseDTO> list(Pageable pag) {
+		log.info("LISTING PROGRAMS:::START");
 		var page = programRepository.findAll(pag);
+		log.info("LISTING PROGRAMS:::END");
 		return page.map(ProgramResponseDTO::new);
 	}
 
 	@Override
 	public Page<ProgramResponseDTO> listByUser(Long userID, Pageable pageable) {
-		log.info("LISTING PROGRAM:::START");
+		log.info("LISTING PROGRAM BY USER:::START");
 		User user = userRepository.getReferenceById(userID);
-		log.info("LISTING PROGRAM:::USER FOUND: {} ", user);
+		log.info("LISTING PROGRAM BY USER:::USER FOUND: {} ", user);
 		var page = programRepository.findByUser(user, pageable);
-		log.info("LISTING PROGRAM:::END");
+		log.info("LISTING PROGRAM  BY USER:::END");
 		return page.map(ProgramResponseDTO::new);
 	}
 	

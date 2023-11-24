@@ -24,9 +24,15 @@ import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
-@Data
+@Getter
+@Setter
+@EqualsAndHashCode(of = {"id", "user"})
+@ToString(exclude = {"user", "programSender", "programReceiver", "miles"})
 @Entity
 @Table(name = "transactions")
 public class Transaction {
