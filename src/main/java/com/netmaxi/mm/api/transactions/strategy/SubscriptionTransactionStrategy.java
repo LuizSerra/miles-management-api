@@ -9,6 +9,9 @@ import com.netmaxi.mm.api.transactions.Transaction;
 import com.netmaxi.mm.api.transactions.dto.TransactionRequestDTO;
 import com.netmaxi.mm.api.user.UserRepository;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Service
 public class SubscriptionTransactionStrategy implements TransactionStrategy {
 
@@ -27,10 +30,13 @@ public class SubscriptionTransactionStrategy implements TransactionStrategy {
 	@Override
 	public Transaction execute(TransactionRequestDTO transactionRequestDTO) {
 		
+		log.info("TRANSACTION SUBSCRIPTION:::START");
 		var user = this.userRepository.findById(transactionRequestDTO.user())
 				.orElseThrow(() -> new IllegalArgumentException("User must be informed."));
+		log.info("TRANSACTION SUBSCRIPTION:::USER FOUND: {}", user);
 		var sender = this.programRepository.findById(transactionRequestDTO.programSender())
 				.orElseThrow(() -> new IllegalArgumentException("Program sender must be informed."));
+		log.info("TRANSACTION SUBSCRIPTION::: PROGRAM SENDER FOUND: {}", sender);
 		
 		Miles miles = new Miles(transactionRequestDTO.amount(), transactionRequestDTO.price(), transactionRequestDTO.expiration(), sender);
 		
@@ -45,7 +51,7 @@ public class SubscriptionTransactionStrategy implements TransactionStrategy {
 		transaction.setProgramSender(sender);
 		transaction.setUser(user);
 		
-		
+		log.info("TRANSACTION SUBSCRIPTION:::END:::TRANSACTION: {}", transaction);
 		return transaction;
 	}
 

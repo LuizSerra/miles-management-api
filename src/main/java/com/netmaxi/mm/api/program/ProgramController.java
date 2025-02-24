@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.netmaxi.mm.api.messageSender.infra.SQSMessageSender;
 import com.netmaxi.mm.api.program.dto.ProgramModifiedDTO;
 import com.netmaxi.mm.api.program.dto.ProgramModifyDTO;
 import com.netmaxi.mm.api.program.dto.ProgramRequestDTO;
@@ -23,22 +24,22 @@ import com.netmaxi.mm.api.program.service.ProgramService;
 
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/programs")
 public class ProgramController {
 	
 	private final ProgramService programaService;
-	
-	public ProgramController(ProgramService programaService) {
-		this.programaService = programaService;
-	}
+	private final SQSMessageSender sqsMessageSender;
 
 	@PostMapping
 	@Transactional
 	public ResponseEntity<ProgramResponseDTO> create(@RequestBody @Valid ProgramRequestDTO programaRequestDTO,	UriComponentsBuilder uriBuilder) throws Exception {
 		var programaCriado = programaService.create(programaRequestDTO);
 		URI uri = uriBuilder.path("/programas/{id}").buildAndExpand(programaCriado.id()).toUri();
+		this.sqsMessageSender.sendMessage(programaCriado.name());
 		return ResponseEntity.created(uri).body(programaCriado);
 	}
 	

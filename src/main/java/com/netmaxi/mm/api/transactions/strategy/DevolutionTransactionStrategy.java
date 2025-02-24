@@ -9,6 +9,9 @@ import com.netmaxi.mm.api.transactions.Transaction;
 import com.netmaxi.mm.api.transactions.dto.TransactionRequestDTO;
 import com.netmaxi.mm.api.user.UserRepository;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Service
 public class DevolutionTransactionStrategy implements TransactionStrategy {
 
@@ -27,12 +30,13 @@ public class DevolutionTransactionStrategy implements TransactionStrategy {
 	
 	@Override
 	public Transaction execute(TransactionRequestDTO transactionRequestDTO) {
-		
+		log.info("TRANSACTION DEVOLUTION:::START");
 		var user = this.userRepository.findById(transactionRequestDTO.user())
 				.orElseThrow(() -> new IllegalArgumentException("User must be informed."));
+		log.info("TRANSACTION DEVOLUTION:::USER FOUND: {}", user);
 		var sender = this.programRepository.findById(transactionRequestDTO.programSender())
 				.orElseThrow(() -> new IllegalArgumentException("Program sender must be informed."));
-		
+		log.info("TRANSACTION DEVOLUTION::: PROGRAM SENDER FOUND: {}", sender);
 		Miles miles = new Miles(transactionRequestDTO.amount(), transactionRequestDTO.price(), transactionRequestDTO.expiration(), sender);		
 		sender.setBalance(sender.getBalance() + transactionRequestDTO.amount());
 		
@@ -46,7 +50,7 @@ public class DevolutionTransactionStrategy implements TransactionStrategy {
 		transaction.setMiles(miles);
 		transaction.setUser(user);
 		
-		
+		log.info("TRANSACTION DEVOLUTION:::END:::TRANSACTION: {}", transaction);
 		return transaction;
 	}
 

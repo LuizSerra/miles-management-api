@@ -2,7 +2,6 @@ package com.netmaxi.mm.api.miles;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.netmaxi.mm.api.miles.dto.MilesModifyDTO;
@@ -20,7 +19,15 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.Valid;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 
+@Getter
+@Setter
+@EqualsAndHashCode(of = {"id"})
+@ToString(exclude = {"program"})
 @Entity(name = "Miles")
 @Table( name = "miles")
 public class Miles {
@@ -72,62 +79,4 @@ public class Miles {
 		if(milesModifyDTO.program() != null) this.program = milesModifyDTO.program();
 		
 	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public Integer getAmount() {
-		return amount;
-	}
-
-	public void setAmount(Integer amount) {
-		this.amount = amount;
-	}
-
-	public BigDecimal getPrice() {
-		return price;
-	}
-
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
-
-	public LocalDate getExpiration() {
-		return expiration;
-	}
-
-	public void setExpiration(LocalDate expiration) {
-		this.expiration = expiration;
-	}
-
-	public Program getProgram() {
-		return program;
-	}
-
-	public void setProgram(Program program) {
-		this.program = program;
-	}
-
-	@Override
-	public int hashCode() {
-		return Objects.hash(id, program);
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Miles other = (Miles) obj;
-		return Objects.equals(id, other.id) && Objects.equals(program, other.program);
-	}
-	
 }

@@ -14,6 +14,9 @@ import com.netmaxi.mm.api.transactions.Transaction;
 import com.netmaxi.mm.api.transactions.dto.TransactionRequestDTO;
 import com.netmaxi.mm.api.user.UserRepository;
 
+import lombok.extern.log4j.Log4j2;
+
+@Log4j2
 @Service
 public class SellTransactionStrategy implements TransactionStrategy {
 
@@ -36,15 +39,20 @@ public class SellTransactionStrategy implements TransactionStrategy {
 	@Override
 	public Transaction execute(TransactionRequestDTO transactionRequestDTO) {
 		
+		log.info("TRANSACTION SELL:::START");
 		var user = this.userRepository.findById(transactionRequestDTO.user())
 				.orElseThrow(() -> new IllegalArgumentException("User must be informed."));
+		log.info("TRANSACTION SELL:::USER FOUND: {}", user);
 		var sender = this.programRepository.findById(transactionRequestDTO.programSender())
 				.orElseThrow(() -> new IllegalArgumentException("Program sender must be informed."));
-		
+		log.info("TRANSACTION SELL::: PROGRAM SENDER FOUND: {}", sender);
+				
 		this.programService.validateTransaction(sender.getBalanceAvailable(), transactionRequestDTO.amount());
+		log.info("TRANSACTION SELL::: TRANSACTION VALIDATED. BALANCE AVAILABLE: {}, AMOUNT REQUIRED: {}",
+				sender.getBalanceAvailable(), transactionRequestDTO.amount());
+		
 
 		var milesList = milesRepository.findMilesBasedOnCriteria(sender.getId(), LocalDate.now());
-		
 		int soma = 0;
 		int amount = transactionRequestDTO.amount();
 		List<Miles> milesAdded = new ArrayList<>();
@@ -54,6 +62,7 @@ public class SellTransactionStrategy implements TransactionStrategy {
 				milesAdded.add(miles);
 			}
 		}
+		log.info("TRANSACTION SELL:::MILES ADDED LIST SIZE: {}", milesAdded.size());
 		for (Miles miles : milesAdded) {
 			if(amount > miles.getAmount()) {
 				int result = miles.getAmount() - amount;
@@ -73,7 +82,7 @@ public class SellTransactionStrategy implements TransactionStrategy {
 		transaction.setProgramSender(sender);
 		transaction.setUser(user);
 		
-		
+		log.info("TRANSACTION SELL:::END:::TRANSACTION: {}", transaction);
 		return transaction;
 	}
 
